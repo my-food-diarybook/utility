@@ -4,7 +4,7 @@ from datetime import datetime
 import sys
 
 """
-log파일을 텍스트모드로 분석합니다.
+api log파일을 텍스트모드로 분석합니다.
 """
 
 # 로그파일에 있는 key들을 여기에 넣어서 내용을 찾도록 합니다.
