@@ -28,9 +28,7 @@ class Log:
 
 def load(filename):
     lines = []
-    loadingText = str()
     starPoint = 1
-	
     with open(filename, "r", encoding="utf-8") as f:
         while True:
             loadingText = "Loading{}".format("." * starPoint)
@@ -53,18 +51,24 @@ def load(filename):
 
 def process(data):
     while True:
-
         for idx in range(len(searchKeys)):
             print(str(idx + 1) + '.' + searchKeys[idx], end=', ')
         print(str(len(searchKeys) + 1) + '.exit', end=' ')
-        selection = int(input(":: what do you next?"))
+        try:
+            selection = int(input(":: what do you next? ::"))
+        except ValueError:
+            continue
+        finally:
+            os.system('cls' if os.name == 'nt' else 'clear')
 
-        if selection == len(searchKeys) + 1:
+        if selection < 1 or len(searchKeys) + 1 < selection:
+            continue
+        elif selection == len(searchKeys) + 1:
+            print("\033[42m ****** bye! ****** \033[0m")
             break
         else:
             selection -= 1
             keyword = input("what is the keyword?")
-            os.system('cls' if os.name == 'nt' else 'clear')
             findIndex = []
             for i in range(len(data)):
                 if searchKeys[selection] in data[i].request and keyword in str(
@@ -77,16 +81,20 @@ def process(data):
                     findIndex.append(i)
 
         if len(findIndex) > 0:
-            print("****** found! ******")
+            print("\033[42m ****** found! ****** \033[0m")
             count = 0
             for idx in findIndex:
                 count += 1
                 print(str(count))
                 print(data[idx].__str__())
-                print("********************")
+                print("\033[42m ******************** \033[0m")
 
 
 if __name__ == "__main__":
-    lines = load(input("input file name: "))
-    print(":: load is finished ::")
-    process(lines)
+    try:
+        lines = load(input("input file name: "))
+        print(":: load is finished ::")
+        process(lines)
+    except FileNotFoundError:
+        print("\033[42m no such file \033[0m")
+
